@@ -45,3 +45,36 @@ header {
   background-position: center;
   background-size: contain;
 }
+
+.transpButton {
+  background: transparent;
+  box-shadow: none;
+  border: none;
+  width: 90px;
+  height: 46px;
+}
+
+.exitButton {
+  font-family: Righteous;
+  font-size: 1.5rem;
+  text-align: center;
+  color: white;
+  border: 3px solid white;
+  border-radius: 10px;
+  box-shadow: 6px 6px 6px #b02323;
+  background-color: #3466af;
+  width: 90px;
+  height: 46px;
+}
+
+.exitButton:hover {
+  cursor: pointer;
+}
+
+.exitButton:active {
+  border: 2px solid #b02323;
+  background-color: #2f5c9e;
+  box-shadow: none;
+}
+
+/**************************************************************************/
