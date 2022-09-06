@@ -3,6 +3,7 @@ import './Game.css';
 import { getPoks } from '../../utils/getPoks';
 import { Card } from '../Card/Card.js';
 import PropTypes from 'prop-types';
+import Loading from '../Loading/Loading.js';
 
 class CardBack extends React.Component {
   render() {
@@ -31,15 +32,15 @@ export class Game extends React.Component {
     data = await getPoks(numOfPoks);
     for (let i = 0; i < numOfPoks; i++) {
       poksData[i] = {
-        name: data[i].forms[0].name ? data[i].forms[0].name : 'XXX',
-        HP: data[i].stats[0].base_stat ? data[i].stats[0].base_stat : 0,
-        attack: data[i].stats[1].base_stat ? data[i].stats[1].base_stat : 0,
-        defense: data[i].stats[2].base_stat ? data[i].stats[2].base_stat : 0,
+        name: !!data[i].forms[0].name ? data[i].forms[0].name : 'XXX',
+        HP: !!data[i].stats[0].base_stat ? data[i].stats[0].base_stat : 0,
+        attack: !!data[i].stats[1].base_stat ? data[i].stats[1].base_stat : 0,
+        defense: !!data[i].stats[2].base_stat ? data[i].stats[2].base_stat : 0,
         sum:
-          (data[i].stats[0].base_stat ? data[i].stats[0].base_stat : 0) +
-          (data[i].stats[1].base_stat ? data[i].stats[1].base_stat : 0) +
-          (data[i].stats[2].base_stat ? data[i].stats[2].base_stat : 0),
-        sprite: data[i].sprites.other.dream_world.front_default
+          (!!data[i].stats[0].base_stat ? data[i].stats[0].base_stat : 0) +
+          (!!data[i].stats[1].base_stat ? data[i].stats[1].base_stat : 0) +
+          (!!data[i].stats[2].base_stat ? data[i].stats[2].base_stat : 0),
+        sprite: !!data[i].sprites.other.dream_world.front_default
           ? data[i].sprites.other.dream_world.front_default
           : data[i].sprites.front_default,
         type: data[i].types[0].type.name,
@@ -156,48 +157,50 @@ export class Game extends React.Component {
 
     return (
       <div className="gameMain">
-        <div className="playerCard">
-          <p className="playerDesc">{`PLAYER ${
-            mode === 'with_comp' ? '' : '1'
-          }: ${playerOnePoints}`}</p>
-          {loading ? (
-            <div>Loading</div>
-          ) : beginning ? (
-            <CardBack onClick={this.handleClickCardOne} />
-          ) : (
-            <Card
-              type={poks[indexOne].type}
-              name={poks[indexOne].name}
-              sprite={poks[indexOne].sprite}
-              HP={poks[indexOne].HP}
-              attack={poks[indexOne].attack}
-              defense={poks[indexOne].defense}
-              sum={poks[indexOne].sum}
-              onClick={this.handleClickCardOne}
-            />
-          )}
-        </div>
-        <div className="playerCard">
-          <p className="playerDesc">{`${
-            mode === 'with_comp' ? 'COMPUTER' : 'PLAYER 2'
-          }: ${playerTwoPoints}`}</p>
-          {loading ? (
-            <div>Loading</div>
-          ) : beginning ? (
-            <CardBack onClick={this.handleClickCardTwo} />
-          ) : (
-            <Card
-              type={poks[indexTwo].type}
-              name={poks[indexTwo].name}
-              sprite={poks[indexTwo].sprite}
-              HP={poks[indexTwo].HP}
-              attack={poks[indexTwo].attack}
-              defense={poks[indexTwo].defense}
-              sum={poks[indexTwo].sum}
-              onClick={this.handleClickCardTwo}
-            />
-          )}
-        </div>
+        {loading ? (
+          <Loading />
+        ) : (
+          <React.Fragment>
+            <div className="playerCard">
+              <p className="playerDesc">{`PLAYER ${
+                mode === 'with_comp' ? '' : '1'
+              }: ${playerOnePoints}`}</p>
+              {beginning ? (
+                <CardBack onClick={this.handleClickCardOne} />
+              ) : (
+                <Card
+                  type={poks[indexOne].type}
+                  name={poks[indexOne].name}
+                  sprite={poks[indexOne].sprite}
+                  HP={poks[indexOne].HP}
+                  attack={poks[indexOne].attack}
+                  defense={poks[indexOne].defense}
+                  sum={poks[indexOne].sum}
+                  onClick={this.handleClickCardOne}
+                />
+              )}
+            </div>
+            <div className="playerCard">
+              <p className="playerDesc">{`${
+                mode === 'with_comp' ? 'COMPUTER' : 'PLAYER 2'
+              }: ${playerTwoPoints}`}</p>
+              {beginning ? (
+                <CardBack onClick={this.handleClickCardTwo} />
+              ) : (
+                <Card
+                  type={poks[indexTwo].type}
+                  name={poks[indexTwo].name}
+                  sprite={poks[indexTwo].sprite}
+                  HP={poks[indexTwo].HP}
+                  attack={poks[indexTwo].attack}
+                  defense={poks[indexTwo].defense}
+                  sum={poks[indexTwo].sum}
+                  onClick={this.handleClickCardTwo}
+                />
+              )}
+            </div>
+          </React.Fragment>
+        )}
       </div>
     );
   }
