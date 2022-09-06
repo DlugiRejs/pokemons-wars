@@ -11,6 +11,7 @@ import water from '../../images/water.svg';
 import grass from '../../images/grass.svg';
 import fairy from '../../images/fairy.svg';
 import './Card.css';
+import PropTypes from 'prop-types';
 
 export class Card extends React.Component {
   choosePokLogoAndStyle = () => {
@@ -115,3 +116,14 @@ export class Card extends React.Component {
     );
   }
 }
+
+Card.propTypes = {
+  type: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  sprite: PropTypes.string,
+  HP: PropTypes.number,
+  attack: PropTypes.number,
+  defense: PropTypes.number,
+  sum: PropTypes.number,
+  onClick: PropTypes.func.isRequired,
+};

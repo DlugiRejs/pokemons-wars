@@ -2,6 +2,7 @@ import React from 'react';
 import './Game.css';
 import { getPoks } from '../../utils/getPoks';
 import { Card } from '../Card/Card.js';
+import PropTypes from 'prop-types';
 
 class CardBack extends React.Component {
   render() {
@@ -201,3 +202,9 @@ export class Game extends React.Component {
     );
   }
 }
+
+Game.propTypes = {
+  numberOfPoks: PropTypes.number.isRequired,
+  mode: PropTypes.string.isRequired,
+  gameRule: PropTypes.string.isRequired,
+};

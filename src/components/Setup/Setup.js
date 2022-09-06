@@ -1,6 +1,7 @@
 import React from 'react';
 import Pikachu from '../../images/pikachu.png';
 import './Setup.css';
+import PropTypes from 'prop-types';
 
 export class Setup extends React.Component {
   render() {
@@ -12,6 +13,8 @@ export class Setup extends React.Component {
       setPlay,
     } = this.props;
     let disabled = !(mode && gameRule && numberOfPoks);
+    const amounts = ['20', '40', '60', '80', '100'];
+    const rules = ['HP', 'attack', 'defense', 'sum'];
     return (
       <div className="setupMain">
         <div className="setupCard">
@@ -36,10 +39,11 @@ export class Setup extends React.Component {
             onChange={handleGameRuleChange}
           >
             <option value="">--Choose Rule--</option>
-            <option value="HP">HP</option>
-            <option value="attack">Attack</option>
-            <option value="defense">Defense</option>
-            <option value="sum">Sum</option>
+            {rules.map((rule) => (
+              <option key={rule} value={rule}>
+                {rule}
+              </option>
+            ))}
           </select>
         </div>
         <div className="setupCard">
@@ -51,11 +55,11 @@ export class Setup extends React.Component {
             onChange={handleNumberOfPoksChange}
           >
             <option value="">--Choose Number--</option>
-            <option value="20">20</option>
-            <option value="40">40</option>
-            <option value="60">60</option>
-            <option value="80">80</option>
-            <option value="100">100</option>
+            {amounts.map((amount) => (
+              <option key={amount} value={amount}>
+                {amount}
+              </option>
+            ))}
           </select>
         </div>
         <button
@@ -71,3 +75,11 @@ export class Setup extends React.Component {
     );
   }
 }
+
+Setup.propTypes = {
+  AppState: PropTypes.object.isRequired,
+  handleModeChange: PropTypes.func.isRequired,
+  handleGameRuleChange: PropTypes.func.isRequired,
+  handleNumberOfPoksChange: PropTypes.func.isRequired,
+  setPlay: PropTypes.func.isRequired,
+};
