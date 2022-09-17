@@ -1,8 +1,9 @@
 import React from 'react';
-import Game from './components/Game/Game.js';
-import { Setup } from './components/Setup/Setup.js';
 import './App.css';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import Loading from './components/Loading/Loading.js';
+const Game = React.lazy(() => import('./components/Game/Game.js'));
+const Setup = React.lazy(() => import('./components/Setup/Setup.js'));
 
 class App extends React.Component {
   state = {
@@ -65,21 +66,23 @@ class App extends React.Component {
               <button className="transpButton" type="button"></button>
             )}
           </header>
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <Setup
-                  AppState={this.state}
-                  handleModeChange={this.handleModeChange}
-                  handleGameRuleChange={this.handleGameRuleChange}
-                  handleNumberOfPoksChange={this.handleNumberOfPoksChange}
-                  setPlay={this.setPlay}
-                />
-              }
-            />
-            <Route path="/game" element={<Game />} />
-          </Routes>
+          <React.Suspense fallback={<Loading />}>
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  <Setup
+                    AppState={this.state}
+                    handleModeChange={this.handleModeChange}
+                    handleGameRuleChange={this.handleGameRuleChange}
+                    handleNumberOfPoksChange={this.handleNumberOfPoksChange}
+                    setPlay={this.setPlay}
+                  />
+                }
+              />
+              <Route path="/game" element={<Game />} />
+            </Routes>
+          </React.Suspense>
         </div>
       </BrowserRouter>
     );

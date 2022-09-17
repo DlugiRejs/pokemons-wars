@@ -4,7 +4,7 @@ import './Setup.css';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-export class Setup extends React.Component {
+export default class Setup extends React.Component {
   render() {
     let { mode, gameRule, numberOfPoks } = this.props.AppState;
     let {
