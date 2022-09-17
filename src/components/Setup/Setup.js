@@ -2,6 +2,7 @@ import React from 'react';
 import Pikachu from '../../images/pikachu.png';
 import './Setup.css';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 export class Setup extends React.Component {
   render() {
@@ -10,7 +11,7 @@ export class Setup extends React.Component {
       handleModeChange,
       handleGameRuleChange,
       handleNumberOfPoksChange,
-      setPlay,
+      setPlay
     } = this.props;
     let disabled = !(mode && gameRule && numberOfPoks);
     const amounts = ['20', '40', '60', '80', '100'];
@@ -62,15 +63,18 @@ export class Setup extends React.Component {
             ))}
           </select>
         </div>
-        <button
-          disabled={disabled}
-          className="playButton"
-          type="button"
-          onClick={setPlay}
+        <Link
+          style={{ textDecoration: 'none' }}
+          to={{
+            pathname: '/game',
+            search: `?mode=${mode}&gameRule=${gameRule}&numberOfPoks=${numberOfPoks}`,
+          }}
         >
-          <span>PLAY</span>
-          <img src={Pikachu} alt="pikachu" />
-        </button>
+          <button disabled={disabled} className="playButton" type="button" onClick={setPlay}>
+            <span>PLAY</span>
+            <img src={Pikachu} alt="pikachu" />
+          </button>
+        </Link>
       </div>
     );
   }

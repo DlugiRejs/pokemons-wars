@@ -1,7 +1,8 @@
 import React from 'react';
-import { Game } from './components/Game/Game.js';
+import Game from './components/Game/Game.js';
 import { Setup } from './components/Setup/Setup.js';
 import './App.css';
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 
 class App extends React.Component {
   state = {
@@ -45,35 +46,42 @@ class App extends React.Component {
   };
 
   render() {
-    let { mode, gameRule, numberOfPoks } = this.state;
     return (
-      <div className="App">
-        <header>
-          <div className="pokemonLogo"></div>
-          {this.state.play ? (
-            <button
-              className="exitButton"
-              type="button"
-              onClick={this.resetState}
-            >
-              EXIT
-            </button>
-          ) : (
-            <button className="transpButton" type="button"></button>
-          )}
-        </header>
-        {this.state.play ? (
-          <Game numberOfPoks={numberOfPoks} mode={mode} gameRule={gameRule} />
-        ) : (
-          <Setup
-            AppState={this.state}
-            handleModeChange={this.handleModeChange}
-            handleGameRuleChange={this.handleGameRuleChange}
-            handleNumberOfPoksChange={this.handleNumberOfPoksChange}
-            setPlay={this.setPlay}
-          />
-        )}
-      </div>
+      <BrowserRouter>
+        <div className="App">
+          <header>
+            <div className="pokemonLogo"></div>
+            {this.state.play ? (
+              <Link style={{ textDecoration: 'none' }} to="/">
+                <button
+                  className="exitButton"
+                  type="button"
+                  onClick={this.resetState}
+                >
+                  EXIT
+                </button>
+              </Link>
+            ) : (
+              <button className="transpButton" type="button"></button>
+            )}
+          </header>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <Setup
+                  AppState={this.state}
+                  handleModeChange={this.handleModeChange}
+                  handleGameRuleChange={this.handleGameRuleChange}
+                  handleNumberOfPoksChange={this.handleNumberOfPoksChange}
+                  setPlay={this.setPlay}
+                />
+              }
+            />
+            <Route path="/game" element={<Game />} />
+          </Routes>
+        </div>
+      </BrowserRouter>
     );
   }
 }

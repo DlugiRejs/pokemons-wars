@@ -2,8 +2,8 @@ import React from 'react';
 import './Game.css';
 import { getPoks } from '../../utils/getPoks';
 import { Card } from '../Card/Card.js';
-import PropTypes from 'prop-types';
 import Loading from '../Loading/Loading.js';
+import withSearchParams from '../withSearchParams';
 
 class CardBack extends React.Component {
   render() {
@@ -15,7 +15,7 @@ class CardBack extends React.Component {
   }
 }
 
-export class Game extends React.Component {
+class Game extends React.Component {
   state = {
     indexOne: 0,
     indexTwo: 1,
@@ -54,24 +54,30 @@ export class Game extends React.Component {
   };
 
   componentDidMount() {
-    this.getPoksData(this.props.numberOfPoks);
+    const sp = this.props.router.searchParams;
+    const numberOfPoks = sp.get('numberOfPoks');
+    this.getPoksData(numberOfPoks);
   }
 
   componentDidUpdate(prevProps, prevState) {
+    const sp = this.props.router.searchParams;
+    const mode = sp.get('mode');
     let { indexOne, indexTwo, beginning } = this.state;
 
     if (
       (prevState.beginning && !beginning) ||
       (prevState.indexOne + 1 !== prevState.indexTwo &&
         indexOne + 1 === indexTwo &&
-        this.props.mode === '2_Players') ||
-      (prevState.indexOne + 2 === indexOne && this.props.mode === 'with_comp')
+        mode === '2_Players') ||
+      (prevState.indexOne + 2 === indexOne && mode === 'with_comp')
     ) {
       this.pointsCalculator();
     }
   }
 
   handleClickCardOne = () => {
+    const sp = this.props.router.searchParams;
+    const mode = sp.get('mode');
     if (this.state.beginning) {
       this.setState({
         beginning: false,
@@ -79,12 +85,12 @@ export class Game extends React.Component {
     } else {
       this.setState((state) => {
         if (state.indexOne < state.poks.length - 2) {
-          if (this.props.mode === 'with_comp') {
+          if (mode === 'with_comp') {
             return {
               indexOne: state.indexOne + 2,
               indexTwo: state.indexTwo + 2,
             };
-          } else if (this.props.mode === '2_Players') {
+          } else if (mode === '2_Players') {
             if (state.indexOne < state.indexTwo) {
               return {
                 indexOne: state.indexOne + 2,
@@ -96,8 +102,10 @@ export class Game extends React.Component {
     }
   };
   handleClickCardTwo = () => {
+    const sp = this.props.router.searchParams;
+    const mode = sp.get('mode');
     if (this.state.beginning) {
-      if (this.props.mode === '2_Players') {
+      if (mode === '2_Players') {
         this.setState({
           beginning: false,
         });
@@ -105,7 +113,7 @@ export class Game extends React.Component {
     } else {
       this.setState((state) => {
         if (state.indexTwo < state.poks.length - 1) {
-          if (this.props.mode === '2_Players') {
+          if (mode === '2_Players') {
             if (
               state.indexOne > state.indexTwo ||
               state.indexOne + 1 === state.indexTwo
@@ -122,19 +130,17 @@ export class Game extends React.Component {
 
   pointsCalculator = () => {
     let { poks, indexOne, indexTwo } = this.state;
+    const sp = this.props.router.searchParams;
+    const gameRule = sp.get('gameRule');
 
-    if (
-      poks[indexOne][this.props.gameRule] > poks[indexTwo][this.props.gameRule]
-    ) {
+    if (poks[indexOne][gameRule] > poks[indexTwo][gameRule]) {
       this.setState((state) => {
         return {
           playerOnePoints: state.playerOnePoints + 1,
         };
       });
     }
-    if (
-      poks[indexOne][this.props.gameRule] < poks[indexTwo][this.props.gameRule]
-    ) {
+    if (poks[indexOne][gameRule] < poks[indexTwo][gameRule]) {
       this.setState((state) => {
         return {
           playerTwoPoints: state.playerTwoPoints + 1,
@@ -144,7 +150,8 @@ export class Game extends React.Component {
   };
 
   render() {
-    let { mode } = this.props;
+    const sp = this.props.router.searchParams;
+    const mode = sp.get('mode');
     let {
       poks,
       indexOne,
@@ -206,8 +213,4 @@ export class Game extends React.Component {
   }
 }
 
-Game.propTypes = {
-  numberOfPoks: PropTypes.number.isRequired,
-  mode: PropTypes.string.isRequired,
-  gameRule: PropTypes.string.isRequired,
-};
+export default withSearchParams(Game);
